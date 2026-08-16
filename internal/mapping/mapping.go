@@ -57,12 +57,10 @@ type Rule struct {
 	Default string // 源缺失且无值时使用的默认值
 }
 
-var suggestScratch []Rule
-
 // Suggest 基于字段名相似度（编辑距离）为 dst 的每个字段建议映射来源。
 // 仅当 src 中存在编辑距离不超过 maxDist 的字段时才给出建议。
 func Suggest(src, dst *schema.Schema, maxDist int) []Rule {
-	suggestScratch = suggestScratch[:0]
+	var rules []Rule
 	srcNames := make([]string, len(src.Fields))
 	for i, f := range src.Fields {
 		srcNames[i] = f.Name
@@ -78,10 +76,10 @@ func Suggest(src, dst *schema.Schema, maxDist int) []Rule {
 			}
 		}
 		if best != "" && bestD <= maxDist {
-			suggestScratch = append(suggestScratch, Rule{Source: best, Target: df.Name})
+			rules = append(rules, Rule{Source: best, Target: df.Name})
 		}
 	}
-	return suggestScratch
+	return rules
 }
 
 // Apply 按规则把一条源记录转换为目标记录。
