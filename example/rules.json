@@ -1,0 +1,5 @@
+[
+  { "source": "user_id",   "target": "id",    "type": "int" },
+  { "source": "full_name", "target": "name",  "type": "string" },
+  { "source": "email_addr","target": "email", "type": "string" }
+]
